@@ -16,7 +16,7 @@ def main():
     # --- Configuration ---
     # Use pathlib to build robust paths relative to the project root
     ROOT_DIR = get_project_root()
-    INPUT_CSV_PATH = ROOT_DIR / 'data' / 'raw' / 'WD Self Analytics Dataset.csv'
+    INPUT_CSV_PATH = ROOT_DIR / 'data' / 'raw' / 'data.csv'
     DB_OUTPUT_PATH = ROOT_DIR / 'data' / 'processed' / 'analytics.db'
     
     TABLE_NAME = 'analytics_data'

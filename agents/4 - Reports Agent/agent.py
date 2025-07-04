@@ -5,7 +5,6 @@ import os
 import io
 import sys
 import json
-import certifix
 import sqlite3
 from pathlib import Path
 import datetime
@@ -60,8 +59,6 @@ except Exception as e:
     sys.exit(f"Error initializing Vertex AI: {e}")
 
 # --- V4 Tool Definitions ---
-
-
 def create_report_folder(tool_context: ToolContext) -> str:
     """Use this tool FIRST to create a unique workspace folder for a new report."""
     print("  [Tool Call] create_report_folder triggered.")
@@ -84,7 +81,6 @@ def execute_sql_query(sql_query: str) -> str:
         conn = sqlite3.connect(DB_PATH)
         result_df = pd.read_sql_query(sql_query, conn)
         conn.close()
-        # Return data as a JSON string for the agent to process
         return result_df.to_json(orient="split")
     except Exception as e:
         return json.dumps({"error": str(e)})
@@ -111,8 +107,6 @@ def execute_plotting_code(python_code: str, report_folder_path: str) -> str:
 
         exec(python_code, execution_scope)
 
-        # The plotting code is expected to save the figure itself.
-        # We just need to confirm it ran. The agent will know the filename it chose.
         return json.dumps({"status": "success", "message": "Plotting code executed."})
     except Exception as e:
         return json.dumps({"error": str(e)})
@@ -172,6 +166,3 @@ root_agent = LlmAgent(
     * **AGENT's FINAL ANSWER (Text):** "I have successfully created the report. It is saved at: C:\\...\\report_123\\report.md"
     """,
 )
-
-
-# Use Plotly isntead mathplotlib and seaborn

@@ -3,7 +3,6 @@ import os
 import io
 import sys
 import json
-import certifix
 import sqlite3
 from pathlib import Path
 
@@ -96,11 +95,9 @@ def execute_sql_query(sql_query: str) -> str:
 
 # --- Final Agent Definition ---
 
-# Define tools using the minimalist API syntax that works for your ADK version
 schema_inspector_tool = FunctionTool(func=inspect_db_schema)
 query_executor_tool = FunctionTool(func=execute_sql_query)
 
-# Define the single, powerful agent that handles the entire workflow
 root_agent = LlmAgent(
     name="SqlAnalyticsAssistant",
     model=os.getenv("AGENT_MODEL", "gemini-1.5-pro-001"),
@@ -108,7 +105,6 @@ root_agent = LlmAgent(
         schema_inspector_tool,
         query_executor_tool,
     ],
-    # The final, bulletproof prompt tailored for SQL
     instruction="""You are an expert SQL Database Analyst. Your purpose is to answer user questions by inspecting a database schema, writing SQLite queries, executing them, and summarizing the result. You must be methodical and follow the process perfectly.
 
     **REASONING PROCESS:**
@@ -136,8 +132,4 @@ root_agent = LlmAgent(
     * **YOUR 3rd THOUGHT (after getting the JSON result `[{"COUNT(*)": 50}]`):** "The query was successful. The result is 50. I will now formulate the final answer."
     * **YOUR FINAL ANSWER (Text):** "There are 50 employees in the 'France' country."
     """,
-)
-
-print(
-    "Analytics agent v2 (Definitive Final Version) loaded successfully and ready to run."
 )

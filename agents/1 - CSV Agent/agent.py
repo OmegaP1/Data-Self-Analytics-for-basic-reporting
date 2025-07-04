@@ -3,7 +3,6 @@ import os
 import io
 import sys
 import json
-import certifix
 from pathlib import Path
 
 # --- Load environment variables from .env file ---
@@ -27,7 +26,7 @@ print("Loading data analytics agent (Definitive Final Version)...")
 
 # --- Path Configuration ---
 PROJECT_ROOT = Path.cwd().parent
-CSV_PATH = PROJECT_ROOT / "data" / "raw" / "WD Self Analytics Dataset.csv"
+CSV_PATH = PROJECT_ROOT / "data" / "raw" / "data.csv"
 
 if not CSV_PATH.exists():
     sys.exit(f"FATAL ERROR: CSV file not found at the expected path: {CSV_PATH}")
@@ -86,14 +85,9 @@ def execute_pandas_query(query_code: str) -> str:
         return json.dumps({"error": str(e)})
 
 
-# --- Final Agent Definition ---
-
-# FIX: Define tools with the minimal API supported by your ADK version.
-# No 'description', no 'output_key'.
 schema_inspector_tool = FunctionTool(func=inspect_csv_schema)
 query_executor_tool = FunctionTool(func=execute_pandas_query)
 
-# This is the single, powerful agent that will handle the entire workflow.
 root_agent = LlmAgent(
     name="CsvAnalyticsAssistant",
     model=os.getenv("AGENT_MODEL", "gemini-1.5-pro-001"),
@@ -101,7 +95,6 @@ root_agent = LlmAgent(
         schema_inspector_tool,
         query_executor_tool,
     ],
-    # FIX: This is a "bulletproof" prompt that avoids ambiguity and shows the model exactly how to behave.
     instruction="""You are an expert Data Analytics AI. Your purpose is to answer user questions about a dataset by inspecting its schema, writing Python pandas code, executing it, and summarizing the result. You must be methodical and follow the process perfectly.
 
     **REASONING PROCESS:**

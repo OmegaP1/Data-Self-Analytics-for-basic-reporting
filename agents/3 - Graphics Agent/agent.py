@@ -3,7 +3,6 @@ import os
 import io
 import sys
 import json
-import certifix
 import sqlite3
 from pathlib import Path
 import datetime
@@ -98,7 +97,6 @@ def execute_sql_query(sql_query: str) -> str:
         return json.dumps({"error": str(e)})
 
 
-# --- FIX 1: This tool now returns the file path of the saved image ---
 def execute_plotting_code(python_code: str) -> str:
     """Executes Python code to generate a plot, saves it to the logs folder, and returns a JSON object with the file path."""
     print(f"  [Tool Call] execute_plotting_code with code:\n---\n{python_code}\n---")
@@ -126,7 +124,6 @@ def execute_plotting_code(python_code: str) -> str:
                 f.write(base64.b64decode(b64_image))
             print(f"Image successfully saved to {file_path}")
 
-            # Return a JSON object with the status and the absolute path to the file
             return json.dumps(
                 {"status": "success", "file_path": str(file_path.resolve())}
             )
@@ -147,7 +144,6 @@ root_agent = LlmAgent(
         FunctionTool(func=execute_sql_query),
         FunctionTool(func=execute_plotting_code),
     ],
-    # --- FIX 2: Prompt is updated for the new tool output ---
     instruction="""You are an expert-level Data Visualization and Analytics AI. Your purpose is to answer user questions by inspecting a database, generating code, and executing it.
 
     **REASONING PROCESS:**
@@ -178,5 +174,3 @@ root_agent = LlmAgent(
     * **AGENT's FINAL ANSWER (Text):** "Success! I have generated the chart you requested. It has been saved to your computer at the following location: C:\\Users\\YourUser\\YourProject\\agents\\data_self_analytics__basic_reporting_v3\\logs\\plot_20250618_143000.png"
     """,
 )
-
-print("Analytics agent v3 (Final Presentation) loaded successfully and ready to run.")

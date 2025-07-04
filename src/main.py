@@ -14,13 +14,12 @@ def main():
     Main function to run the data processing pipeline.
     """
     # --- Configuration ---
-    # Use pathlib to build robust paths relative to the project root
     ROOT_DIR = get_project_root()
     INPUT_CSV_PATH = ROOT_DIR / 'data' / 'raw' / 'data.csv'
     DB_OUTPUT_PATH = ROOT_DIR / 'data' / 'processed' / 'analytics.db'
     
     TABLE_NAME = 'analytics_data'
-    CHUNK_SIZE = 100000  # Process 100,000 rows at a time
+    CHUNK_SIZE = 100000  
 
     # --- Ensure output directory exists ---
     DB_OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -58,7 +57,7 @@ def main():
     finally:
         print("\nProcessing complete!")
 
-    # --- Verification (Optional) ---
+    # --- Verification ---
     print("\nVerifying the data in the database...")
     try:
         df_from_db = pd.read_sql_query(f"SELECT * FROM {TABLE_NAME} LIMIT 5", conn)

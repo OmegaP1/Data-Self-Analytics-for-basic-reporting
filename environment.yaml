@@ -1,0 +1,6 @@
+name: data_self_analytics_for_basic_reporting_agent
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - -r "requirements.txt"

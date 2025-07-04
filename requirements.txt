@@ -1,0 +1,11 @@
+google-generativeai
+google-cloud-aiplatform
+google-cloud-storage
+google-adk
+pypdf 
+python-dotenv
+pypdf
+pandas
+python-dotenv
+matplotlib
+seaborn
